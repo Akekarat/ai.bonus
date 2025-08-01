@@ -40,6 +40,30 @@ body {
 
 .wheel-container {
   transition: transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  border: 10px solid #f3f4f6;
+}
+
+.wheel-segment {
+  transition: all 0.3s ease;
+}
+
+.wheel-segment:hover {
+  filter: brightness(1.1);
+}
+
+.spin-button {
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.spin-button:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.spin-button:active:not(:disabled) {
+  transform: scale(0.95);
 }
 
 .duration-5000 {

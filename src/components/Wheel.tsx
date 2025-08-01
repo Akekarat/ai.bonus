@@ -24,30 +24,48 @@ const Wheel: React.FC<WheelProps> = ({
   const segmentAngle = 360 / segments.length;
   
   const handleSpin = () => {
-    if (disabled || spinning || selectedSegment) return;
+    if (disabled || spinning || !selectedSegment) return;
     
     setSpinning(true);
     
     // Calculate final rotation to land on the selected segment
-    const segmentIndex = segments.indexOf(selectedSegment!);
-    const segmentPosition = 360 - (segmentIndex * segmentAngle);
+    const segmentIndex = segments.findIndex(s => 
+      s.label === selectedSegment.label && s.image === selectedSegment.image
+    );
+    
+    if (segmentIndex === -1) {
+      console.error('Selected segment not found in segments array');
+      setSpinning(false);
+      return;
+    }
+    
+    // Calculate the angle to the middle of the segment
+    const segmentMiddleAngle = segmentIndex * segmentAngle + (segmentAngle / 2);
+    
+    // The wheel needs to rotate so that the segment is at the top (270 degrees)
+    const segmentPosition = 270 - segmentMiddleAngle;
     
     // Add extra rotations for effect (5-10 full rotations)
     const extraRotations = 5 + Math.floor(Math.random() * 5);
     const finalRotation = rotation + (360 * extraRotations) + segmentPosition;
     
-    // Animate the spin
+    // Animate the spin with easing
     setRotation(finalRotation);
     
     // Call onSpinComplete after animation ends
     setTimeout(() => {
       setSpinning(false);
-      onSpinComplete(selectedSegment!);
+      onSpinComplete(selectedSegment);
     }, 5000); // Match this with CSS animation duration
   };
   
   return (
     <div className="relative w-full max-w-md mx-auto aspect-square touch-none">
+      {/* Pointer/Indicator */}
+      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+        <div className="w-0 h-0 border-l-[20px] border-r-[20px] border-t-[30px] border-l-transparent border-r-transparent border-t-red-600"></div>
+      </div>
+      
       <div 
         ref={wheelRef}
         className={`wheel-container w-full h-full rounded-full overflow-hidden transition-transform duration-5000 ease-out`}
@@ -58,7 +76,7 @@ const Wheel: React.FC<WheelProps> = ({
           return (
             <div 
               key={index}
-              className="absolute top-0 left-0 w-1/2 h-1/2 origin-bottom-right"
+              className="absolute top-0 left-0 w-1/2 h-1/2 origin-bottom-right wheel-segment"
               style={{ transform: `rotate(${startAngle}deg)` }}
             >
               <div className="w-full h-full overflow-hidden">

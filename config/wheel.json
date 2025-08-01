@@ -1,0 +1,12 @@
+[
+  {
+    "label": "Bonus 10%",
+    "image": "/images/bonus10.png",
+    "chance": 0.1
+  },
+  {
+    "label": "No Bonus",
+    "image": "/images/nobonus.png",
+    "chance": 0.9
+  }
+] 

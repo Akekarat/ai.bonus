@@ -1,0 +1,381 @@
+Certainly! Below is the entire PRD as plain markdown text so you can easily copy and paste it into any .md file, Notion doc, or GitHub README.
+
+# 📄 Product Requirements Document (PRD) — Bonus App
+
+
+## 1. Product Overview
+
+
+**Name:** Bonus  
+**Platform:** Mobile & Web (Responsive)  
+**Tech Stack:** Next.js (TypeScript), TailwindCSS, SQLite  
+**Purpose:** Bonus is a gamified experience where users spin a wheel (like Russian roulette) to randomly win a reward. The outcome is controlled via JSON configuration to determine the chance and visual representation of each section.
+
+
+---
+
+
+## 2. Goals
+
+
+- Create an interactive, visually appealing roulette-style game.
+- Each URL represents a unique, single-playable game instance.
+- Store game outcomes and state locally via SQLite (`database.sql`).
+- Allow configurable wheel sections and probabilities through JSON.
+
+
+---
+
+
+## 3. Personas
+
+
+### 🎯 Persona 1: Casual Gamer
+- **Name:** Sarah  
+- **Age:** 26  
+- **Goals:** Try her luck, have fun in a few minutes.  
+- **Frustrations:** Too many steps before playing.
+
+
+### 🎯 Persona 2: Marketing Manager
+- **Name:** Tom  
+- **Age:** 34  
+- **Goals:** Use Bonus to drive promotions and rewards for customers.  
+- **Frustrations:** Difficult setup, lack of result tracking.
+
+
+---
+
+
+## 4. User Stories
+
+
+| ID | As a...             | I want to...                                         | So that...                               |
+|----|---------------------|------------------------------------------------------|-------------------------------------------|
+| U1 | Casual Gamer        | spin the wheel by tapping                            | I can find out if I win something         |
+| U2 | Marketing Manager   | generate a unique play link                          | I can share a one-time game instance      |
+| U3 | System              | prevent users from playing more than once per URL    | game integrity is preserved               |
+| U4 | Developer           | configure wheel with JSON file                       | to dynamically manage game content        |
+| U5 | Analyst             | see what was selected and when                       | for reporting and analytics               |
+
+
+---
+
+
+## 5. Features
+
+
+### 🔁 Feature 1: Game Wheel Rotation
+
+
+#### Description:
+- Interactive wheel styled like Russian roulette.
+- Wheel sections, chance, and image configured via JSON file.
+
+
+#### JSON Format (example):
+
+
+```json
+[
+  {
+    "label": "Bonus 10%",
+    "image": "/images/bonus10.png",
+    "chance": 0.1
+  },
+  {
+    "label": "No Bonus",
+    "image": "/images/nobonus.png",
+    "chance": 0.9
+  }
+]
+
+UI Details:
+Wheel with evenly spaced segments.
+
+
+Image per segment, rendered from JSON.
+
+
+Central button labeled “SPIN”.
+
+
+Input/Interaction:
+User taps center of the wheel.
+
+
+Backend Logic:
+Weighted random selection is pre-determined before spin starts.
+
+
+Spin animation starts fast, then slows to the predetermined result.
+
+
+Success Criteria:
+User sees a smooth animation.
+
+
+Final result lands exactly on the selected outcome.
+
+
+Result is visually shown with associated label and image.
+
+
+Result is saved in database.sql.
+
+
+
+🔗 Feature 2: Unique Game URL Generator
+Description:
+Page includes “Generate Game Link” button.
+
+
+Generates a one-time playable URL (e.g., /game/abc123).
+
+
+UI Details:
+Button: “Generate Game Link”
+
+
+Output field: New URL (auto copied to clipboard or with copy button).
+
+
+Backend Logic:
+UUID generated and associated with a “playable” state.
+
+
+Stored in SQLite with played = false.
+
+
+Success Criteria:
+URL created and shown to user.
+
+
+Stored in SQLite with metadata:
+
+
+id (UUID)
+
+
+created_at
+
+
+played (boolean)
+
+
+result (nullable)
+
+
+
+🎮 Feature 3: Game URL Play Page
+URL Format:
+/game/:id
+
+
+Description:
+Loads wheel config and game state by id.
+
+
+UI States:
+Playable: Show wheel and spin button.
+
+
+Already Played: Show the result directly, no spin interaction.
+
+
+Input:
+:id from URL param.
+
+
+Read game state from database.
+
+
+Logic:
+If played = false, allow spin.
+
+
+If played = true, show result.
+
+
+Success Criteria:
+Game status is respected.
+
+
+Result saved immediately after spin.
+
+
+User cannot refresh and play again.
+
+
+
+🗃 Feature 4: Local Data Storage
+Description:
+All play data and results saved in database.sql.
+
+
+Schema:
+CREATE TABLE games (
+  id TEXT PRIMARY KEY,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  played BOOLEAN DEFAULT 0,
+  result_label TEXT,
+  result_image TEXT
+);
+
+Input:
+UUID of game session
+
+
+Result selected by chance
+
+
+Success Criteria:
+Entry created when URL is generated.
+
+
+Updated when user finishes spin with result.
+
+
+Persisted locally.
+
+
+
+6. Constraints
+Each URL can be used only once to ensure fairness.
+
+
+App must be mobile-first, fully responsive.
+
+
+Spin must look fair but follow pre-determined result.
+
+
+Local SQLite file must persist between server restarts (or clearly explain behavior otherwise).
+
+
+Config JSON must be loaded from a known path (e.g., /config/wheel.json).
+
+
+
+7. Project Timeline
+Phase
+Duration
+Deliverables
+✅ Planning
+1 day
+PRD, JSON config format
+🎨 Design
+2 days
+UI mockups, responsive wireframes
+🔧 Development
+7 days
+Frontend + Backend (all features)
+🧪 Testing & QA
+2 days
+Bugfix, UAT checklist
+🚀 Launch
+Day 12
+Live deployment
+
+
+8. Dependencies
+package.json (partial)
+{
+  "dependencies": {
+    "next": "^13.4.12",
+    "react": "^18.2.0",
+    "tailwindcss": "^3.3.2",
+    "sqlite3": "^5.1.6",
+    "uuid": "^9.0.0"
+  }
+}
+
+
+9. User Acceptance Criteria (UAC)
+🔁 Game Wheel
+Wheel spins smoothly with easing and stops on correct item.
+
+
+Images and labels appear on correct segments.
+
+
+Spin button is disabled after one use.
+
+
+Result shown clearly with image and label.
+
+
+🔗 URL Generator
+Clicking "Generate Game Link" creates unique URL.
+
+
+URL is saved in database.sql.
+
+
+UI shows copyable link.
+
+
+🎮 Game URL Page
+Loads correct game by URL ID.
+
+
+If not played, shows wheel and allows spin.
+
+
+If already played, shows static result only.
+
+
+Database updated with result after spin.
+
+
+🗃 Local Data Persistence
+All data saved in database.sql.
+
+
+played flag updated correctly.
+
+
+Result label and image stored on completion.
+
+
+
+10. Future Enhancements
+Admin panel to view all games and results.
+
+
+Email or SMS integration to share game links.
+
+
+Ability to upload JSON via UI for wheel config.
+
+
+Animation sound effects and haptics.
+
+
+
+11. Appendices
+🎨 Suggested Wheel UI Layout
+Center button for spin.
+
+
+Wheel with even segments (min 6, max 12).
+
+
+Segment background color optional from JSON.
+
+
+Mobile-first layout with fullscreen wheel.
+
+
+
+End of PRD
+
+
+---
+
+
+Let me know if you'd like me to create a downloadable `.md` file or convert this into another format like PDF or HTML.
+
+
+
+

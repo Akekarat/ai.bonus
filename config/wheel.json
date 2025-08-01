@@ -1,12 +1,27 @@
 [
   {
     "label": "Bonus 10%",
-    "image": "/images/bonus10.png",
+    "image": "/images/bonus10.svg",
+    "chance": 0.1
+  },
+  {
+    "label": "Bonus 20%",
+    "image": "/images/bonus20.svg",
+    "chance": 0.05
+  },
+  {
+    "label": "Bonus 5%",
+    "image": "/images/bonus5.svg",
+    "chance": 0.15
+  },
+  {
+    "label": "Free Spin",
+    "image": "/images/freespin.svg",
     "chance": 0.1
   },
   {
     "label": "No Bonus",
-    "image": "/images/nobonus.png",
-    "chance": 0.9
+    "image": "/images/nobonus.svg",
+    "chance": 0.6
   }
 ] 

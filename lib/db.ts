@@ -9,12 +9,19 @@ export interface Game {
   result_image?: string;
 }
 
+let dbInstance: Database | null = null;
+
 export async function openDb(): Promise<Database> {
+  if (dbInstance) {
+    return dbInstance;
+  }
+  
   try {
-    return await open({
+    dbInstance = await open({
       filename: './database.sql',
       driver: sqlite3.Database
     });
+    return dbInstance;
   } catch (error) {
     console.error('Database connection error:', error);
     throw new Error('Failed to connect to database');

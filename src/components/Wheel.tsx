@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback, memo } from 'react';
 import Image from 'next/image';
 import { WheelSegment } from '../../lib/wheelConfig';
 
@@ -11,7 +11,7 @@ interface WheelProps {
   selectedSegment?: WheelSegment | null;
 }
 
-const Wheel: React.FC<WheelProps> = ({ 
+const Wheel = memo<WheelProps>(({ 
   segments, 
   onSpinComplete, 
   disabled = false,
@@ -23,7 +23,7 @@ const Wheel: React.FC<WheelProps> = ({
   
   const segmentAngle = 360 / segments.length;
   
-  const handleSpin = () => {
+  const handleSpin = useCallback(() => {
     if (disabled || spinning || !selectedSegment) return;
     
     setSpinning(true);
@@ -57,7 +57,7 @@ const Wheel: React.FC<WheelProps> = ({
       setSpinning(false);
       onSpinComplete(selectedSegment);
     }, 5000); // Match this with CSS animation duration
-  };
+  }, [disabled, spinning, selectedSegment, segments, segmentAngle, rotation, onSpinComplete]);
   
   return (
     <div className="relative w-full max-w-md mx-auto aspect-square touch-none">
@@ -86,6 +86,9 @@ const Wheel: React.FC<WheelProps> = ({
                     alt={segment.label}
                     fill
                     className="object-cover"
+                    priority={index < 2}
+                    placeholder="blur"
+                    blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23f0f0f0'/%3E%3C/svg%3E"
                   />
                   <div className="absolute bottom-0 left-0 w-full text-center text-white bg-black bg-opacity-50 p-1 text-sm sm:text-base">
                     {segment.label}
@@ -106,6 +109,8 @@ const Wheel: React.FC<WheelProps> = ({
       </button>
     </div>
   );
-};
+});
+
+Wheel.displayName = 'Wheel';
 
 export default Wheel; 

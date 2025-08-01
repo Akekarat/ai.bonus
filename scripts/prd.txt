@@ -1,0 +1,106 @@
+Product Requirements Document (PRD) - Bonus Mobile App
+1. Product Summary
+The Bonus mobile app is a gamified experience designed to engage users through a "spin the wheel" mechanic, similar to Russian roulette. The core of the application revolves around a rotating wheel with customizable sections, each having a configurable chance of being selected and a corresponding image. The app will provide a unique URL for each game instance, ensuring that each game can only be played once per URL. After a game is played, the URL will permanently display the result. All game data will be persistently stored in an SQLite database. This document aims to provide a comprehensive guide for design and development teams, ensuring a clear understanding of the product's vision, features, and technical requirements.
+2. Personas
+2.1. Player Persona: Engaged User
+* Name: Alex
+* Age: 25-35
+* Occupation: Social Media Enthusiast, Casual Gamer
+* Goals: To have a fun, quick, and engaging experience. To see a clear and immediate result. To easily share the game or its results with friends.
+* Frustrations: Complicated interfaces, long loading times, repetitive gameplay, inability to share results.
+2.2. Administrator Persona: Content Manager
+* Name: Sarah
+* Age: 30-45
+* Occupation: Marketing Coordinator, Community Manager
+* Goals: To easily configure game chances and images without technical intervention. To generate unique game URLs efficiently. To track game results and user engagement.
+* Frustrations: Manual configuration, lack of data insights, complex URL generation, difficulty in updating game content.
+3. User Stories
+3.1. As a Player, I want to...
+* ...access the game easily via a unique URL so I can start playing quickly.
+* ...see a clear and engaging wheel interface so I understand how to play.
+* ...tap a button to spin the wheel so I can initiate the game.
+* ...see the wheel spin and slow down to a specific result so the game feels fair and suspenseful.
+* ...view my game result clearly after the spin so I know what I won (or lost).
+* ...be unable to play the game again on the same URL so that each game is a unique instance.
+* ...see the result consistently when I revisit a played URL so I can verify what happened.
+3.2. As an Administrator, I want to...
+* ...configure the sections of the wheel, their chances, and images via a JSON file so I can customize the game without code changes.
+* ...generate unique URLs for new game instances so I can distribute them to players.
+* ...ensure that each generated URL is valid for only one play session so the game can't be exploited.
+* ...have game results stored in an SQLite database so I can analyze player behavior and outcomes.
+4. Project Timeline
+Phase
+	Start Date
+	End Date
+	Key Deliverables
+	Phase 1: Planning & Design
+	Date
+	Date
+	PRD Finalized, UI/UX Mockups, Technical Design Document
+	Phase 2: Core Development
+	Date
+	Date
+	Wheel Rotation Logic, JSON Configuration Parsing, URL Generation
+	Phase 3: Database & Persistence
+	Date
+	Date
+	SQLite Integration, Game State Saving/Loading
+	Phase 4: URL Management & Playback
+	Date
+	Date
+	Single-Play URL Enforcement, Result Display on Revisit
+	Phase 5: Testing & Deployment
+	Date
+	Date
+	QA Testing, Bug Fixes, App Store Submission
+	5. Constraints
+* Platform: Mobile app (iOS and Android, initially targeting one platform if resource constrained, specify which one if known).
+* Backend: No dedicated backend server. All configuration and data persistence will be handled locally on the device using SQLite.
+* Configuration: Wheel sections, chances, and images must be configured via a JSON file embedded within the app or loaded from a local asset.
+* URL Generation: URL generation for new games should be a simple, accessible interface for administrators.
+* Security: While a full backend is not in scope, consider basic measures to prevent easy URL manipulation if possible on the client side.
+* Offline Functionality: The core game should function without an internet connection once the app is downloaded and configured.
+6. Detailed Features
+6.1. Feature: Wheel Configuration via JSON
+* User sees: No direct user interface. This is an administrator/developer-facing feature.
+* Data/Input it collects: A JSON file named config.json (or similar) will contain an array of objects. Each object will represent a section of the wheel and include:
+   * "id": A unique identifier for the section (string).
+   * "name": Display name for the section (string).
+   * "image_url": Local path or asset name for the image associated with the section (string).
+   * "chance": A numerical value representing the weight/probability of this section being chosen (integer or float). The sum of all "chance" values will determine the overall distribution.
+* Exact conditions for success (UAC):
+   * The app successfully parses the config.json file on startup.
+   * All sections defined in the JSON are correctly loaded and represented on the wheel.
+   * Changes to the config.json file are reflected in the wheel's appearance and spin logic upon app restart or configuration reload.
+   * Invalid JSON formatting or missing required fields in config.json are handled gracefully (e.g., app defaults to a default configuration or displays an error).
+6.2. Feature: Game Play Interface
+* User sees:
+   * A visually appealing wheel with clearly defined sections and their associated images.
+   * A prominent "SPIN" button in the center of the wheel.
+   * Background and branding elements consistent with the "Bonus" app theme.
+* Data/Input it collects: User taps the "SPIN" button.
+* Exact conditions for success (UAC):
+   * The wheel is rendered correctly, reflecting the configuration from the JSON file.
+   * The "SPIN" button is clearly visible and clickable.
+   * Upon tapping "SPIN", the wheel visually rotates.
+   * The wheel's rotation speed increases initially, then gradually decreases.
+   * The wheel comes to a complete stop with one specific section clearly highlighted as the result.
+   * The game result is determined by the configured chances in the JSON, simulating a "predetermined location from chance" (i.e., the outcome is decided before the spin animation completes, and the animation lands on that pre-determined outcome).
+   * The "SPIN" button becomes disabled or disappears after the game is played on a given URL.
+   * The game state (played/not played, result) is saved to database.sql after the spin completes.
+6.3. Feature: Unique URL Generation
+* User sees:
+   * An administrative interface (e.g., a separate screen or a hidden developer mode) with a "Generate New URL" button.
+   * A text field or display area showing the newly generated URL.
+   * (Optional) A "Copy URL" button.
+* Data/Input it collects: User taps the "Generate New URL" button.
+* Exact conditions for success (UAC):
+   * Each time the "Generate New URL" button is tapped, a truly unique URL is created.
+   * The generated URL is a valid, shareable link that can be opened in a mobile browser (or directly by the app if associated).
+   * The URL structure clearly identifies it as a unique game instance (e.g., bonusapp://game/<unique_id>).
+   * The generated URL is internally linked to a new, unplayed game state in the database.sql file.
+6.4. Feature: Single Play Per URL Enforcement
+* User sees:
+   * First visit to a fresh URL: The game play interface (wheel and spin button).
+   * Subsequent visits to a played URL: Only the game result is displayed, with no "SPIN" button or option to replay.
+* Data/Input it collects: No direct user input after the first play. The app internally checks the

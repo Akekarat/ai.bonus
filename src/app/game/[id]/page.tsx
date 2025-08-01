@@ -111,7 +111,7 @@ export default function GamePage() {
   
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center p-4">
         <p className="text-xl">Loading game...</p>
       </div>
     );
@@ -119,7 +119,7 @@ export default function GamePage() {
   
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center p-4">
         <div className="text-center">
           <p className="text-xl text-red-600 mb-4">{error}</p>
           <button
@@ -135,13 +135,13 @@ export default function GamePage() {
   
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <main className="w-full max-w-md mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-6">Bonus Wheel</h1>
+      <main className="w-full max-w-md mx-auto px-4 sm:px-0">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">Bonus Wheel</h1>
         
         {game?.played && spinComplete ? (
           <div className="text-center">
             <div className="mb-6">
-              <div className="relative w-48 h-48 mx-auto mb-4">
+              <div className="relative w-48 h-48 sm:w-64 sm:h-64 mx-auto mb-4">
                 <Image 
                   src={game.result_image!} 
                   alt={game.result_label!}
@@ -149,8 +149,8 @@ export default function GamePage() {
                   className="object-contain"
                 />
               </div>
-              <h2 className="text-2xl font-bold mb-2">Your Result:</h2>
-              <p className="text-xl">{game.result_label}</p>
+              <h2 className="text-xl sm:text-2xl font-bold mb-2">Your Result:</h2>
+              <p className="text-lg sm:text-xl">{game.result_label}</p>
             </div>
             <button
               onClick={() => router.push('/')}

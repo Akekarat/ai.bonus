@@ -47,7 +47,7 @@ const Wheel: React.FC<WheelProps> = ({
   };
   
   return (
-    <div className="relative w-full max-w-md mx-auto aspect-square">
+    <div className="relative w-full max-w-md mx-auto aspect-square touch-none">
       <div 
         ref={wheelRef}
         className={`wheel-container w-full h-full rounded-full overflow-hidden transition-transform duration-5000 ease-out`}
@@ -69,7 +69,7 @@ const Wheel: React.FC<WheelProps> = ({
                     fill
                     className="object-cover"
                   />
-                  <div className="absolute bottom-0 left-0 w-full text-center text-white bg-black bg-opacity-50 p-1">
+                  <div className="absolute bottom-0 left-0 w-full text-center text-white bg-black bg-opacity-50 p-1 text-sm sm:text-base">
                     {segment.label}
                   </div>
                 </div>
@@ -80,7 +80,7 @@ const Wheel: React.FC<WheelProps> = ({
       </div>
       
       <button
-        className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600 text-white font-bold py-4 px-6 rounded-full z-10 ${(disabled || spinning || selectedSegment) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-700'}`}
+        className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600 text-white font-bold py-4 px-6 rounded-full z-10 spin-button ${(disabled || spinning || selectedSegment) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-700'} sm:py-6 sm:px-8 sm:text-lg`}
         onClick={handleSpin}
         disabled={disabled || spinning || !!selectedSegment}
       >

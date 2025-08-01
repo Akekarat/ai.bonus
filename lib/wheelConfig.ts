@@ -10,33 +10,42 @@ export interface WheelSegment {
 export type WheelConfig = WheelSegment[];
 
 export async function loadWheelConfig(): Promise<WheelConfig> {
-  const configPath = path.join(process.cwd(), 'config', 'wheel.json');
-  const configData = await fs.promises.readFile(configPath, 'utf8');
-  const config: WheelConfig = JSON.parse(configData);
-  
-  // Validate config
-  if (!Array.isArray(config) || config.length < 2) {
-    throw new Error('Invalid wheel configuration: must be an array with at least 2 segments');
-  }
-  
-  // Validate each segment has required fields
-  for (let i = 0; i < config.length; i++) {
-    const segment = config[i];
-    if (!segment.label || !segment.image || typeof segment.chance !== 'number') {
-      throw new Error(`Invalid segment at index ${i}: missing required fields`);
+  try {
+    const configPath = path.join(process.cwd(), 'config', 'wheel.json');
+    const configData = await fs.promises.readFile(configPath, 'utf8');
+    const config: WheelConfig = JSON.parse(configData);
+    
+    // Validate config
+    if (!Array.isArray(config) || config.length < 2) {
+      throw new Error('Invalid wheel configuration: must be an array with at least 2 segments');
     }
-    if (segment.chance < 0 || segment.chance > 1) {
-      throw new Error(`Invalid segment at index ${i}: chance must be between 0 and 1`);
+    
+    // Validate each segment has required fields
+    for (let i = 0; i < config.length; i++) {
+      const segment = config[i];
+      if (!segment.label || !segment.image || typeof segment.chance !== 'number') {
+        throw new Error(`Invalid segment at index ${i}: missing required fields`);
+      }
+      if (segment.chance < 0 || segment.chance > 1) {
+        throw new Error(`Invalid segment at index ${i}: chance must be between 0 and 1`);
+      }
     }
+    
+    // Validate total chance adds up to approximately 1
+    const totalChance = config.reduce((sum, segment) => sum + segment.chance, 0);
+    if (Math.abs(totalChance - 1) > 0.001) {
+      console.warn(`Warning: Wheel segment chances sum to ${totalChance}, not 1. This may cause unexpected behavior.`);
+    }
+    
+    return config;
+  } catch (error) {
+    console.error('Error loading wheel config:', error);
+    // Provide a fallback configuration
+    return [
+      { label: 'Bonus 10%', image: '/images/bonus10.svg', chance: 0.1 },
+      { label: 'No Bonus', image: '/images/nobonus.svg', chance: 0.9 }
+    ];
   }
-  
-  // Validate total chance adds up to approximately 1
-  const totalChance = config.reduce((sum, segment) => sum + segment.chance, 0);
-  if (Math.abs(totalChance - 1) > 0.001) {
-    throw new Error(`Invalid wheel configuration: chances must sum to 1, got ${totalChance}`);
-  }
-  
-  return config;
 }
 
 export function validateWheelConfig(config: WheelConfig): boolean {

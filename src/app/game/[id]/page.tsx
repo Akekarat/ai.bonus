@@ -122,12 +122,6 @@ export default function GamePage() {
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="text-center">
           <p className="text-xl text-red-600 mb-4">{error}</p>
-          <button
-            onClick={() => router.push('/')}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Back to Home
-          </button>
         </div>
       </div>
     );
@@ -152,12 +146,6 @@ export default function GamePage() {
               <h2 className="text-xl sm:text-2xl font-bold mb-2">Your Result:</h2>
               <p className="text-lg sm:text-xl">{game.result_label}</p>
             </div>
-            <button
-              onClick={() => router.push('/')}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Back to Home
-            </button>
           </div>
         ) : (
           <Wheel 

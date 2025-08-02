@@ -101,9 +101,9 @@ const Wheel = memo<WheelProps>(({
       </div>
       
       <button
-        className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600 text-white font-bold py-4 px-6 rounded-full z-10 spin-button ${(disabled || spinning || selectedSegment) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-700'} sm:py-6 sm:px-8 sm:text-lg`}
+        className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600 text-white font-bold py-4 px-6 rounded-full z-10 spin-button ${(disabled || spinning) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-700'} sm:py-6 sm:px-8 sm:text-lg`}
         onClick={handleSpin}
-        disabled={disabled || spinning || !!selectedSegment}
+        disabled={disabled || spinning}
       >
         SPIN
       </button>

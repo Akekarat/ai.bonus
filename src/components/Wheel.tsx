@@ -87,17 +87,18 @@ const Wheel = memo<WheelProps>(({
   }
 
   return (
-    <div className="relative w-full max-w-[300px] mx-auto aspect-square touch-none" style={{ maxWidth: 300, maxHeight: 300 }}>
-      {/* Pointer/Indicator (right edge, fixed) */}
-      <div className="absolute top-1/2" style={{ right: '-32px', transform: 'translateY(-50%)' }}>
-        <div className="w-0 h-0 border-t-[20px] border-b-[20px] border-r-[30px] border-t-transparent border-b-transparent border-r-red-600"></div>
-      </div>
-      <svg
-        ref={wheelRef as any}
-        className="wheel-container w-full h-full rounded-full overflow-visible transition-transform duration-5000 ease-out"
-        style={{ transform: `rotate(${rotation}deg)`, width: '100%', height: '100%' }}
-        viewBox="0 0 300 300"
-      >
+    <div className="flex flex-col items-center w-full max-w-[300px] mx-auto">
+      <div className="relative aspect-square w-full" style={{ maxWidth: 300, maxHeight: 300 }}>
+        {/* Pointer/Indicator (right edge, fixed) */}
+        <div className="absolute top-1/2" style={{ right: '-32px', transform: 'translateY(-50%)' }}>
+          <div className="w-0 h-0 border-t-[20px] border-b-[20px] border-r-[30px] border-t-transparent border-b-transparent border-r-red-600"></div>
+        </div>
+        <svg
+          ref={wheelRef as any}
+          className="wheel-container w-full h-full rounded-full overflow-visible transition-transform duration-5000 ease-out"
+          style={{ transform: `rotate(${rotation}deg)`, width: '100%', height: '100%' , borderColor: 'transparent'}}
+          viewBox="0 0 300 300"
+        >
         {(() => {
           let currentAngle = 0;
           return segments.map((segment, index) => {
@@ -148,7 +149,7 @@ const Wheel = memo<WheelProps>(({
                   y={imgPos.y - 15}
                   width={30}
                   height={30}
-                  style={{ pointerEvents: 'none' }}
+                  style={{ pointerEvents: 'none', visibility: 'hidden' }}
                 />
                 {/* Straight, centered section text */}
                 <text
@@ -168,12 +169,16 @@ const Wheel = memo<WheelProps>(({
           });
         })()}
       </svg>
+      </div>
+      <br/>
+      <br/>
       <button
-        className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600 text-white font-bold py-4 px-6 rounded-full z-10 spin-button ${(disabled || spinning) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-700'} sm:py-6 sm:px-8 sm:text-lg`}
+        className={`mt-8 bg-blue-600 text-white font-extrabold py-7 px-14 rounded-2xl spin-button text-3xl sm:text-4xl shadow-lg ${(disabled || spinning) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'} transition-all duration-200`}
+        style={{ minWidth: 220, minHeight: 80 }}
         onClick={handleSpin}
         disabled={disabled || spinning}
       >
-        SPIN
+        {spinning ? 'Spinning...' : 'SPIN'}
       </button>
     </div>
   );

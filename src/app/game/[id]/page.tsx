@@ -132,28 +132,25 @@ export default function GamePage() {
       <main className="w-full max-w-md mx-auto px-4 sm:px-0">
         <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">Bonus Wheel</h1>
         
-        {game?.played && spinComplete ? (
-          <div className="text-center">
-            <div className="mb-6">
-              <div className="relative w-48 h-48 sm:w-64 sm:h-64 mx-auto mb-4">
-                <Image 
-                  src={game.result_image!} 
-                  alt={game.result_label!}
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <h2 className="text-xl sm:text-2xl font-bold mb-2">Your Result:</h2>
-              <p className="text-lg sm:text-xl">{game.result_label}</p>
+        <Wheel 
+          segments={wheelConfig}
+          onSpinComplete={handleSpinComplete}
+          disabled={game?.played || false}
+          selectedSegment={selectedSegment}
+        />
+        {game?.played && spinComplete && (
+          <div className="text-center mt-6">
+            <div className="relative w-48 h-48 sm:w-64 sm:h-64 mx-auto mb-4">
+              <Image 
+                src={game.result_image!} 
+                alt={game.result_label!}
+                fill
+                className="object-contain"
+              />
             </div>
+            <h2 className="text-xl sm:text-2xl font-bold mb-2">Your Result:</h2>
+            <p className="text-lg sm:text-xl">{game.result_label}</p>
           </div>
-        ) : (
-          <Wheel 
-            segments={wheelConfig}
-            onSpinComplete={handleSpinComplete}
-            disabled={game?.played || false}
-            selectedSegment={selectedSegment}
-          />
         )}
       </main>
     </div>

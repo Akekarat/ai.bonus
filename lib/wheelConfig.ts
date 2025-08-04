@@ -5,6 +5,9 @@ export interface WheelSegment {
   label: string;
   image: string;
   chance: number;
+  color?: string; // hex or CSS color for the section background
+  displayPercentage?: number; // percentage of the wheel this segment should occupy
+  text?: string; // text to display from center to edge
 }
 
 export type WheelConfig = WheelSegment[];

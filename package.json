@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "build:firebase": "next build && next export",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
@@ -10,6 +11,10 @@
   },
   "dependencies": {
     "@types/uuid": "^10.0.0",
+    "firebase": "^12.0.0",
+    "firebase-admin": "^13.4.0",
+    "firebase-functions": "^6.4.0",
+    "firebase-tools": "^14.11.2",
     "next": "15.4.5",
     "react": "19.1.0",
     "react-dom": "19.1.0",

@@ -2,26 +2,41 @@
   {
     "label": "Bonus 10%",
     "image": "/images/bonus10.svg",
-    "chance": 0.1
+    "chance": 0.35,
+    "color": "#FF6384",
+    "displayPercentage": 35,
+    "text": "10% BONUS"
   },
   {
     "label": "Bonus 20%",
     "image": "/images/bonus20.svg",
-    "chance": 0.05
+    "chance": 0.05,
+    "color": "#36A2EB",
+    "displayPercentage": 5,
+    "text": "20% BONUS"
   },
   {
     "label": "Bonus 5%",
     "image": "/images/bonus5.svg",
-    "chance": 0.15
+    "chance": 0.2,
+    "color": "#FFCE56",
+    "displayPercentage": 20,
+    "text": "5% BONUS"
   },
   {
     "label": "Free Spin",
     "image": "/images/freespin.svg",
-    "chance": 0.1
+    "chance": 0.2,
+    "color": "#4BC0C0",
+    "displayPercentage": 20,
+    "text": "FREE SPIN"
   },
   {
     "label": "No Bonus",
     "image": "/images/nobonus.svg",
-    "chance": 0.6
+    "chance": 0.2,
+    "color": "#9966FF",
+    "displayPercentage": 20,
+    "text": "NO BONUS"
   }
 ] 

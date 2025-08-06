@@ -8,6 +8,7 @@ interface WheelProps {
   onSpinComplete: (segment: WheelSegment) => void;
   disabled?: boolean;
   selectedSegment?: WheelSegment | null;
+  spinning?: boolean;
 }
 
 const Wheel: React.FC<WheelProps> = ({ 
@@ -15,6 +16,7 @@ const Wheel: React.FC<WheelProps> = ({
   onSpinComplete, 
   disabled = false,
   selectedSegment = null,
+  spinning: spinningProp = false,
 }) => {
   const [rotation, setRotation] = useState<number>(0);
   const [spinning, setSpinning] = useState<boolean>(false);
@@ -22,9 +24,7 @@ const Wheel: React.FC<WheelProps> = ({
   
   const handleSpin = useCallback(() => {
     if (disabled || spinning || !selectedSegment) return;
-    
     setSpinning(true);
-    
     // Calculate final rotation to land on the selected segment
     const segmentIndex = segments.findIndex((s: WheelSegment) => s.label === selectedSegment!.label && s.image === selectedSegment!.image);
     
@@ -62,6 +62,14 @@ const Wheel: React.FC<WheelProps> = ({
       onSpinComplete(selectedSegment);
     }, 5000); // Match this with CSS animation duration
   }, [disabled, spinning, selectedSegment, segments, rotation, onSpinComplete]);
+
+  // Trigger spin when spinningProp is true
+  React.useEffect(() => {
+    if (spinningProp && !spinning && selectedSegment) {
+      handleSpin();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [spinningProp, selectedSegment]);
 
   // --- SVG helpers ---
   function polarToCartesian(cx: number, cy: number, r: number, angle: number) {
@@ -157,24 +165,7 @@ const Wheel: React.FC<WheelProps> = ({
       </div>
       <br/>
       <br/>
-      {(!disabled && !spinning) && (
-        <button
-          className={`mt-8 bg-blue-600 text-white font-extrabold py-7 px-14 rounded-2xl spin-button text-3xl sm:text-4xl shadow-lg hover:bg-blue-700 transition-all duration-200`}
-          style={{ minWidth: 220, minHeight: 80 }}
-          onClick={handleSpin}
-        >
-          หมุน
-        </button>
-      )}
-      {spinning && (
-        <button
-          className="mt-8 bg-blue-600 text-white font-extrabold py-7 px-14 rounded-2xl spin-button text-3xl sm:text-4xl shadow-lg opacity-50 cursor-not-allowed transition-all duration-200"
-          style={{ minWidth: 220, minHeight: 80, visibility: 'hidden' }}
-          disabled
-        >
-          Spinning...
-        </button>
-      )}
+
     </div>
   );
 }

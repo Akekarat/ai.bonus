@@ -6,12 +6,17 @@ export default function GenerateLink() {
   const [gameUrl, setGameUrl] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [wheelCount, setWheelCount] = useState<number>(1);
 
   const generateGameLink = async () => {
     setIsGenerating(true);
     try {
+      const body = JSON.stringify({ 'wheelCount': wheelCount });
+      console.log('[GenerateLink] wheelCount:', wheelCount, 'body:', body);
       const response = await fetch("/api/games/create", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: body,
       });
       if (!response.ok) {
         throw new Error("Failed to generate game link");
@@ -45,14 +50,31 @@ export default function GenerateLink() {
         <p className="text-gray-600 mb-8 text-center">
           Generate a unique game link to share with others. Each link can only be played once!
         </p>
-        <button
-          onClick={generateGameLink}
-          disabled={isGenerating}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-6 px-6 rounded-2xl mb-8 text-xl sm:text-2xl shadow-lg disabled:opacity-50 active:scale-95 transition-all duration-200"
-          style={{ minHeight: 64, minWidth: 180, letterSpacing: 1 }}
+        <form
+          onSubmit={e => { e.preventDefault(); generateGameLink(); }}
+          className="mb-6 flex flex-col items-center"
         >
-          {isGenerating ? "Generating..." : "Generate Game Link"}
-        </button>
+          <label htmlFor="wheel-count" className="mb-2 font-semibold">Number of Wheels</label>
+          <select
+            id="wheel-count"
+            value={wheelCount}
+            onChange={e => setWheelCount(Number(e.target.value))}
+            className="w-full max-w-xs border rounded-lg p-2 text-lg text-center"
+            style={{ height: 44 }}
+          >
+            {Array.from({ length: 100 }, (_, i) => i + 1).map(num => (
+              <option key={num} value={num}>{num}</option>
+            ))}
+          </select>
+          <button
+            type="submit"
+            disabled={isGenerating}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-6 px-6 rounded-2xl mb-8 text-xl sm:text-2xl shadow-lg disabled:opacity-50 active:scale-95 transition-all duration-200"
+            style={{ minHeight: 64, minWidth: 180, letterSpacing: 1 }}
+          >
+            {isGenerating ? "Generating..." : "Generate Game Link"}
+          </button>
+        </form>
         {gameUrl && (
           <div className="mt-4">
             <div className="flex items-center">

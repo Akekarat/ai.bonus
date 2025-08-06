@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getGame, updateGameResult } from '../../../../../lib/db';
+import { getGame, updateGameResult, updateMultiWheelResults } from '../../../../../lib/db';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -36,14 +36,7 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const { result_label, result_image } = await request.json();
-    
-    if (!result_label || !result_image) {
-      return NextResponse.json(
-        { error: 'Missing result data' },
-        { status: 400 }
-      );
-    }
+    const body = await request.json();
     
     const game = await getGame(id);
     
@@ -57,6 +50,22 @@ export async function PUT(
     if (game.played) {
       return NextResponse.json(
         { error: 'Game already played' },
+        { status: 400 }
+      );
+    }
+    
+    // Handle multi-wheel results (CSV format)
+    if (body.results && Array.isArray(body.results)) {
+      await updateMultiWheelResults(id, body.results);
+      return NextResponse.json({ success: true });
+    }
+    
+    // Handle single wheel result (backward compatibility)
+    const { result_label, result_image } = body;
+    
+    if (!result_label || !result_image) {
+      return NextResponse.json(
+        { error: 'Missing result data' },
         { status: 400 }
       );
     }

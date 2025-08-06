@@ -7,6 +7,9 @@ export interface Game {
   played: boolean;
   result_label?: string;
   result_image?: string;
+  // New fields for multi-wheel support
+  wheel_count?: number;
+  results_csv?: string; // CSV format: "label1,label2,label3"
 }
 
 let dbInstance: Database | null = null;
@@ -37,7 +40,9 @@ export async function initDb(): Promise<Database> {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         played BOOLEAN DEFAULT 0,
         result_label TEXT,
-        result_image TEXT
+        result_image TEXT,
+        wheel_count INTEGER DEFAULT 1,
+        results_csv TEXT
       );
     `);
     return db;
@@ -47,12 +52,12 @@ export async function initDb(): Promise<Database> {
   }
 }
 
-export async function createGame(id: string): Promise<void> {
+export async function createGame(id: string, wheelCount: number = 1): Promise<void> {
   try {
     const db = await openDb();
     await db.run(
-      'INSERT INTO games (id, played) VALUES (?, 0)',
-      [id]
+      'INSERT INTO games (id, played, wheel_count) VALUES (?, 0, ?)',
+      [id, wheelCount]
     );
   } catch (error) {
     console.error('Error creating game:', error);
@@ -88,6 +93,24 @@ export async function updateGameResult(
   } catch (error) {
     console.error('Error updating game result:', error);
     throw new Error('Failed to update game result');
+  }
+}
+
+// New function to save multi-wheel results in CSV format
+export async function updateMultiWheelResults(
+  id: string,
+  results: string[] // Array of result labels
+): Promise<void> {
+  try {
+    const db = await openDb();
+    const resultsCsv = results.join(',');
+    await db.run(
+      'UPDATE games SET played = 1, results_csv = ? WHERE id = ?',
+      [resultsCsv, id]
+    );
+  } catch (error) {
+    console.error('Error updating multi-wheel results:', error);
+    throw new Error('Failed to update multi-wheel results');
   }
 }
 

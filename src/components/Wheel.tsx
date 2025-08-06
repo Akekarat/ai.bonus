@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useCallback, memo } from 'react';
-import Image from 'next/image';
+import React, { useState, useRef, useCallback } from 'react';
 import { WheelSegment } from '../../lib/wheelConfig';
 
 interface WheelProps {
@@ -11,17 +10,15 @@ interface WheelProps {
   selectedSegment?: WheelSegment | null;
 }
 
-const Wheel = memo<WheelProps>(({ 
+const Wheel: React.FC<WheelProps> = ({ 
   segments, 
   onSpinComplete, 
   disabled = false,
-  selectedSegment = null
+  selectedSegment = null,
 }) => {
-  const [rotation, setRotation] = useState(0);
-  const [spinning, setSpinning] = useState(false);
-  const wheelRef = useRef<HTMLDivElement>(null);
-  
-  const segmentAngle = 360 / segments.length;
+  const [rotation, setRotation] = useState<number>(0);
+  const [spinning, setSpinning] = useState<boolean>(false);
+  const wheelRef = useRef<SVGSVGElement | null>(null);
   
   const handleSpin = useCallback(() => {
     if (disabled || spinning || !selectedSegment) return;
@@ -29,9 +26,7 @@ const Wheel = memo<WheelProps>(({
     setSpinning(true);
     
     // Calculate final rotation to land on the selected segment
-    const segmentIndex = segments.findIndex(s => 
-      s.label === selectedSegment.label && s.image === selectedSegment.image
-    );
+    const segmentIndex = segments.findIndex((s: WheelSegment) => s.label === selectedSegment!.label && s.image === selectedSegment!.image);
     
     if (segmentIndex === -1) {
       console.error('Selected segment not found in segments array');
@@ -76,15 +71,6 @@ const Wheel = memo<WheelProps>(({
       y: cy + (r * Math.sin(rad))
     };
   }
-  function describeArc(cx: number, cy: number, r: number, startAngle: number, endAngle: number) {
-    const start = polarToCartesian(cx, cy, r, endAngle);
-    const end = polarToCartesian(cx, cy, r, startAngle);
-    const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
-    return [
-      "M", start.x, start.y,
-      "A", r, r, 0, largeArcFlag, 0, end.x, end.y
-    ].join(" ");
-  }
 
   return (
     <div className="flex flex-col items-center w-full max-w-[300px] mx-auto">
@@ -94,14 +80,14 @@ const Wheel = memo<WheelProps>(({
           <div className="w-0 h-0 border-t-[20px] border-b-[20px] border-r-[30px] border-t-transparent border-b-transparent border-r-red-600"></div>
         </div>
         <svg
-          ref={wheelRef as any}
+          ref={wheelRef}
           className="wheel-container w-full h-full rounded-full overflow-visible transition-transform duration-5000 ease-out"
           style={{ transform: `rotate(${rotation}deg)`, width: '100%', height: '100%' , borderColor: 'transparent'}}
           viewBox="0 0 300 300"
         >
         {(() => {
           let currentAngle = 0;
-          return segments.map((segment, index) => {
+          return segments.map((segment: WheelSegment, index: number) => {
             const percentage = segment.displayPercentage ?? (100 / segments.length);
             const angle = (percentage / 100) * 360;
             const startAngle = currentAngle;
@@ -132,7 +118,6 @@ const Wheel = memo<WheelProps>(({
             const angleCenter = startAngle + angle / 2;
             const textRadius = 100;
             const textPos = polarToCartesian(cx, cy, textRadius, angleCenter);
-            const flip = angleCenter > 90 && angleCenter < 270;
             return (
               <g key={index}>
                 <path
@@ -172,18 +157,26 @@ const Wheel = memo<WheelProps>(({
       </div>
       <br/>
       <br/>
-      <button
-        className={`mt-8 bg-blue-600 text-white font-extrabold py-7 px-14 rounded-2xl spin-button text-3xl sm:text-4xl shadow-lg ${(disabled || spinning) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'} transition-all duration-200`}
-        style={{ minWidth: 220, minHeight: 80 }}
-        onClick={handleSpin}
-        disabled={disabled || spinning}
-      >
-        {spinning ? 'Spinning...' : 'SPIN'}
-      </button>
+      {(!disabled && !spinning) && (
+        <button
+          className={`mt-8 bg-blue-600 text-white font-extrabold py-7 px-14 rounded-2xl spin-button text-3xl sm:text-4xl shadow-lg hover:bg-blue-700 transition-all duration-200`}
+          style={{ minWidth: 220, minHeight: 80 }}
+          onClick={handleSpin}
+        >
+          SPIN
+        </button>
+      )}
+      {spinning && (
+        <button
+          className="mt-8 bg-blue-600 text-white font-extrabold py-7 px-14 rounded-2xl spin-button text-3xl sm:text-4xl shadow-lg opacity-50 cursor-not-allowed transition-all duration-200"
+          style={{ minWidth: 220, minHeight: 80 }}
+          disabled
+        >
+          Spinning...
+        </button>
+      )}
     </div>
   );
-});
-
-Wheel.displayName = 'Wheel';
+}
 
 export default Wheel;

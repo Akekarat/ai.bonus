@@ -1,42 +1,82 @@
 [
   {
-    "label": "Bonus 10%",
+    "label": "1 แต้ม",
     "image": "/images/bonus10.svg",
-    "chance": 0.35,
+    "chance": 0.5276,
     "color": "#FF6384",
-    "displayPercentage": 35,
-    "text": "10% BONUS"
+    "displayPercentage": 18,
+    "text": "1 แต้ม"
   },
   {
-    "label": "Bonus 20%",
+    "label": "3 แต้ม",
     "image": "/images/bonus20.svg",
-    "chance": 0.05,
+    "chance": 0.1762,
     "color": "#36A2EB",
-    "displayPercentage": 5,
-    "text": "20% BONUS"
+    "displayPercentage": 15,
+    "text": "3 แต้ม"
   },
   {
-    "label": "Bonus 5%",
+    "label": "5 แต้ม",
     "image": "/images/bonus5.svg",
-    "chance": 0.2,
+    "chance": 0.1055,
     "color": "#FFCE56",
-    "displayPercentage": 20,
-    "text": "5% BONUS"
+    "displayPercentage": 12,
+    "text": "5 แต้ม"
   },
   {
-    "label": "Free Spin",
+    "label": "7 แต้ม",
     "image": "/images/freespin.svg",
-    "chance": 0.2,
+    "chance": 0.0749,
     "color": "#4BC0C0",
-    "displayPercentage": 20,
-    "text": "FREE SPIN"
+    "displayPercentage": 10,
+    "text": "7 แต้ม"
   },
   {
-    "label": "No Bonus",
+    "label": "10 แต้ม",
     "image": "/images/nobonus.svg",
-    "chance": 0.2,
+    "chance": 0.0528,
     "color": "#9966FF",
-    "displayPercentage": 20,
-    "text": "NO BONUS"
+    "displayPercentage": 7,
+    "text": "10 แต้ม"
+  },
+  {
+    "label": "20 แต้ม",
+    "image": "/images/bonus30.svg",
+    "chance": 0.0264,
+    "color": "#FF9F40",
+    "displayPercentage": 8,
+    "text": "20 แต้ม"
+  },
+  {
+    "label": "50 แต้ม",
+    "image": "/images/bonus10p.svg",
+    "chance": 0.0106,
+    "color": "#8BC34A",
+    "displayPercentage": 8,
+    "text": "50 แต้ม"
+  },
+  {
+    "label": "รับชุดนอนฟรี",
+    "image": "/images/double.svg",
+    "chance": 0.0018,
+    "color": "#E91E63",
+    "displayPercentage": 8,
+    "text": "รับชุดนอนฟรี"
+  },
+  {
+    "label": "ส่งฟรีครั้งต่อไป",
+    "image": "/images/tryagain.svg",
+    "chance": 0.0179,
+    "color": "#00BCD4",
+    "displayPercentage": 8,
+    "text": "ส่งฟรีครั้งต่อไป"
+  },
+  {
+    "label": "รับตุ๊กตาฟรี",
+    "image": "/images/mystery.svg",
+    "chance": 0.0063,
+    "color": "#CDDC39",
+    "displayPercentage": 8,
+    "text": "รับตุ๊กตาฟรี"
   }
-] 
+]

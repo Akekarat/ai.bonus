@@ -130,14 +130,18 @@ export default function GamePage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <main className="w-full max-w-md mx-auto px-4 sm:px-0">
-        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">Bonus Wheel</h1>
+        {!(game?.played && spinComplete) && (
+          <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">รางวัลพิเศษ</h1>
+        )}
         
-        <Wheel 
-          segments={wheelConfig}
-          onSpinComplete={handleSpinComplete}
-          disabled={game?.played || false}
-          selectedSegment={selectedSegment}
-        />
+        {!(game?.played && spinComplete) && (
+          <Wheel 
+            segments={wheelConfig}
+            onSpinComplete={handleSpinComplete}
+            disabled={game?.played || false}
+            selectedSegment={selectedSegment}
+          />
+        )}
         {game?.played && spinComplete && (
           <div className="text-center mt-6">
             <div className="relative w-48 h-48 sm:w-64 sm:h-64 mx-auto mb-4">
@@ -148,8 +152,7 @@ export default function GamePage() {
                 className="object-contain"
               />
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold mb-2">Your Result:</h2>
-            <p className="text-lg sm:text-xl">{game.result_label}</p>
+           <p className="text-[50px] font-bold leading-tight">คุณได้: {game.result_label}</p>
           </div>
         )}
       </main>

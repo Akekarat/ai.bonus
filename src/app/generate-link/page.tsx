@@ -56,23 +56,24 @@ export default function GenerateLink() {
         {gameUrl && (
           <div className="mt-4">
             <div className="flex items-center">
-              <input
-                type="text"
+              <textarea
                 value={gameUrl}
                 readOnly
-                className="flex-grow p-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows={2}
+                className="flex-grow border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm break-all resize-none"
+                style={{ height: 40, maxHeight: 88, wordBreak: 'break-all', whiteSpace: 'pre-wrap', display: 'flex', alignItems: 'center', overflow: 'auto' }}
               />
               <button
                 onClick={copyToClipboard}
-                className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-none border-l border-gray-300"
-                style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+                className="bg-gray-200 hover:bg-gray-300 rounded-none border-l border-gray-300 text-lg font-bold"
+                style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0, height: 44, minWidth: 110, padding: '0 32px' }}
               >
                 {copySuccess ? "Copied!" : "Copy"}
               </button>
               <button
                 onClick={() => window.open(gameUrl, '_blank', 'noopener,noreferrer')}
-                className="bg-blue-100 hover:bg-blue-200 px-4 py-2 rounded-r-lg text-blue-700 font-semibold border-l border-gray-300"
-                style={{ marginLeft: -1 }}
+                className="bg-blue-100 hover:bg-blue-200 rounded-r-lg text-blue-700 font-semibold border-l border-gray-300 text-lg"
+                style={{ marginLeft: -1, height: 44, minWidth: 110, padding: '0 32px' }}
                 aria-label="Open link in new tab"
               >
                 Open

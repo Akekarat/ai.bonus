@@ -76,7 +76,7 @@ const Wheel: React.FC<WheelProps> = ({
     <div className="flex flex-col items-center w-full max-w-[300px] mx-auto">
       <div className="relative aspect-square w-full" style={{ maxWidth: 300, maxHeight: 300 }}>
         {/* Pointer/Indicator (right edge, fixed) */}
-        <div className="absolute top-1/2" style={{ right: '-32px', transform: 'translateY(-50%)' }}>
+        <div className="absolute" style={{ top: 'calc(50% + 12px)', right: '-32px', transform: 'translateY(-50%)' }}>
           <div className="w-0 h-0 border-t-[20px] border-b-[20px] border-r-[30px] border-t-transparent border-b-transparent border-r-red-600"></div>
         </div>
         <svg
@@ -163,13 +163,13 @@ const Wheel: React.FC<WheelProps> = ({
           style={{ minWidth: 220, minHeight: 80 }}
           onClick={handleSpin}
         >
-          SPIN
+          หมุน
         </button>
       )}
       {spinning && (
         <button
           className="mt-8 bg-blue-600 text-white font-extrabold py-7 px-14 rounded-2xl spin-button text-3xl sm:text-4xl shadow-lg opacity-50 cursor-not-allowed transition-all duration-200"
-          style={{ minWidth: 220, minHeight: 80 }}
+          style={{ minWidth: 220, minHeight: 80, visibility: 'hidden' }}
           disabled
         >
           Spinning...

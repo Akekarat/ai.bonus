@@ -54,4 +54,46 @@ The database will automatically migrate when the application starts. Existing si
 Run the database initialization API to ensure schema is updated:
 ```bash
 curl -X POST http://localhost:3000/api/init-db
+```
+
+---
+
+## Database Cleaning & Admin API Usage
+
+### Simple Clean API (`/api/clean-db`)
+- **GET**: Check database status (total games count)
+- **DELETE**: Clean all games from database
+
+**Examples:**
+```bash
+# Check database status
+curl http://localhost:3000/api/clean-db
+
+# Clean all games
+curl -X DELETE http://localhost:3000/api/clean-db
+```
+
+### Advanced Admin API (`/api/db-admin`)
+- **GET** with actions:
+  - `?action=status` — Get database status (total, played, unplayed games)
+  - `?action=list` — List all games (max 50)
+  - `?action=stats` — Get detailed statistics (including average wheel count)
+  - No action — Show available endpoints
+- **DELETE** with actions:
+  - `?action=clean` — Delete all games
+  - `?action=clean-unplayed` — Delete only unplayed games
+
+**Examples:**
+```bash
+# Get database status
+tcurl http://localhost:3000/api/db-admin?action=status
+
+# List all games
+curl http://localhost:3000/api/db-admin?action=list
+
+# Clean only unplayed games
+curl -X DELETE http://localhost:3000/api/db-admin?action=clean-unplayed
+
+# Get detailed statistics
+curl http://localhost:3000/api/db-admin?action=stats
 ``` 

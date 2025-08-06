@@ -136,14 +136,14 @@ const Wheel: React.FC<WheelProps> = ({
                   className="wheel-segment"
                 />
                 {/* Image */}
-                <image
+                {/* <image
                   href={segment.image}
                   x={imgPos.x - 15}
                   y={imgPos.y - 15}
                   width={30}
                   height={30}
                   style={{ pointerEvents: 'none', visibility: 'hidden' }}
-                />
+                /> */}
                 {/* Straight, centered section text */}
                 <text
                   x={textPos.x}
